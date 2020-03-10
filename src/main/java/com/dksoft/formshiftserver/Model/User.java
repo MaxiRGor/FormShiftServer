@@ -3,29 +3,33 @@ package com.dksoft.formshiftserver.Model;
 import javax.persistence.*;
 
 @Entity
-//@Table(name = "questions")
 @Table(name = "formshift_users")
-
 public class User {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY )
-    public Integer id;
 
-    @Column(name = "facebook_id")
-    public String facebookId;
+    public User() {    }
 
-    @Column(name = "email")
-    public String email;
-
-    @Column(name = "name")
-    public String name;
-
-    public User (String facebookId, String email, String name ){
-        this.facebookId = facebookId;
-        this.email = email;
-        this.name = name;
+    public User(String nickname) {
+        this.nickname = nickname;
     }
 
-    public User(){}
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    public Integer id;
+
+    @Column(name = "facebook_data_id")
+    public int facebookDataId;
+
+
+    @Column(name = "leaderboard_general_id")
+    public int leaderboardGeneralId;
+
+    @Column(name = "leaderboard_group_id")
+    public int leaderboardGrouplId;
+
+    @Column(name = "score")
+    public int score;
+
+    @Column(name = "nickname")
+    public String nickname;
 }

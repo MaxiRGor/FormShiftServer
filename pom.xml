@@ -11,7 +11,7 @@
     <groupId>com.dksoft</groupId>
     <artifactId>formshiftserver</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>formshiftserver</name>
+    <nickname>formshiftserver</nickname>
     <description>Server for hyper-casual-1 Formshift</description>
 
     <properties>
