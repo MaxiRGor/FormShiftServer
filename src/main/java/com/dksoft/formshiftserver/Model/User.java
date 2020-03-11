@@ -8,8 +8,9 @@ public class User {
 
     public User() {    }
 
-    public User(String nickname) {
+    public User(String nickname, String deviceId) {
         this.nickname = nickname;
+        this.deviceId = deviceId;
     }
 
     @Id
@@ -17,9 +18,11 @@ public class User {
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     public Integer id;
 
+    @Column(name = "device_id")
+    public String deviceId;
+
     @Column(name = "facebook_data_id")
     public int facebookDataId;
-
 
     @Column(name = "leaderboard_general_id")
     public int leaderboardGeneralId;
@@ -27,9 +30,10 @@ public class User {
     @Column(name = "leaderboard_group_id")
     public int leaderboardGrouplId;
 
-    @Column(name = "score")
-    public int score;
-
     @Column(name = "nickname")
     public String nickname;
+
+    @Column(name = "high_score")
+    public int highScore;
+
 }

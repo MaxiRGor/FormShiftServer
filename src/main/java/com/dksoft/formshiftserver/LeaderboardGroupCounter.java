@@ -8,11 +8,14 @@ public class LeaderboardGroupCounter {
     }
 
     private LeaderboardGroupCounter() {
+        groupCapacity = 100;
+        currentGroupNumber = 0;
+        amountInCurrentGroup = 0;
     }
 
-    private int groupCapacity = 100;
-    private int currentGroupNumber = 0;
-    private int amountInCurrentGroup = 0;
+    private int groupCapacity;
+    private int currentGroupNumber;
+    private int amountInCurrentGroup;
 
     public int GetCurrentGroupNumber(){
         if(amountInCurrentGroup>=groupCapacity)
