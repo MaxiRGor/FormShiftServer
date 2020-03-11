@@ -1,10 +1,7 @@
 package com.dksoft.formshiftserver.Controller;
 
 import com.dksoft.formshiftserver.LeaderboardGroupCounter;
-import com.dksoft.formshiftserver.Model.LeaderboardGeneral;
-import com.dksoft.formshiftserver.Model.LeaderboardGroup;
-import com.dksoft.formshiftserver.Model.User;
-import com.dksoft.formshiftserver.Model.UserFacebookData;
+import com.dksoft.formshiftserver.Model.*;
 import com.dksoft.formshiftserver.Repository.LeaderboardGeneralRepository;
 import com.dksoft.formshiftserver.Repository.LeaderboardGroupRepository;
 import com.dksoft.formshiftserver.Repository.UserFacebookDataRepository;
@@ -12,6 +9,7 @@ import com.dksoft.formshiftserver.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/users")
@@ -66,9 +64,9 @@ public class UserController {
     }
 
 
-    @GetMapping("/join_facebook/{user_id}/{device_id}/{facebook_id}/{email}/{name}/{icon_url}")
+    @GetMapping("/join_facebook_data/{user_id}/{device_id}/{facebook_id}/{email}/{name}/{icon_url}")
     @ResponseBody
-    public boolean JoinFacebookData(@PathVariable int user_id,
+    public HttpResponse JoinFacebookData(@PathVariable int user_id,
                                     @PathVariable String device_id,
                                     @PathVariable String facebook_id,
                                     @PathVariable String email,
@@ -77,7 +75,7 @@ public class UserController {
 
         User user = userRepository.findById(user_id);
         if (!user.deviceId.equals(device_id))
-            return false;
+            return new HttpResponse( HttpServletResponse.SC_FORBIDDEN, "USER ID AND DEVICE ID MISMATCH");
 
         UserFacebookData userFacebookData = new UserFacebookData(user_id, facebook_id, email, name, icon_url);
         userFacebookDataRepository.save(userFacebookData);
@@ -85,26 +83,26 @@ public class UserController {
         user.facebookDataId = userFacebookData.id;
         userRepository.save(user);
 
-        return true;
+        return new HttpResponse( HttpServletResponse.SC_OK, "FACEBOOK DATA JOINED TO USER ACCOUNT");
     }
 
 
     @GetMapping("/set_high_score/{user_id}/{device_id}/{score}")
     @ResponseBody
-    public boolean SetHighScore(@PathVariable int user_id,
-                                @PathVariable String device_id,
-                                @PathVariable int score) {
+    public HttpResponse SetHighScore(@PathVariable int user_id,
+                                     @PathVariable String device_id,
+                                     @PathVariable int score) {
 
         User user = userRepository.findById(user_id);
         if (!user.deviceId.equals(device_id))
-            return false;
+            return new HttpResponse( HttpServletResponse.SC_FORBIDDEN, "USER ID AND DEVICE ID MISMATCH");
 
         if (user.highScore < score) {
             user.highScore = score;
             userRepository.save(user);
-        }
+            return new HttpResponse( HttpServletResponse.SC_OK, "NEW HIGH SCORE ADDED");
+        } else return new HttpResponse( HttpServletResponse.SC_NO_CONTENT, "SCORE IS LOWER THAN HIGH SCORE");
 
-        return true;
     }
 
     private String getUserInfo(User user) {
