@@ -1,5 +1,7 @@
 package com.dksoft.formshiftserver.Model;
 
+import javax.persistence.Entity;
+
 public class HttpResponse {
 
     public HttpResponse() {

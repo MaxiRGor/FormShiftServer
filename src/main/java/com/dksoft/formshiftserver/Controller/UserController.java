@@ -7,6 +7,8 @@ import com.dksoft.formshiftserver.Repository.LeaderboardGroupRepository;
 import com.dksoft.formshiftserver.Repository.UserFacebookDataRepository;
 import com.dksoft.formshiftserver.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +49,7 @@ public class UserController {
         userRepository.save(user);
         int userId = user.id;
 
-        LeaderboardGeneral leaderboardGeneral = new LeaderboardGeneral(userId);
+        LeaderboardGeneral leaderboardGeneral = new LeaderboardGeneral(userId,user.nickname,user.highScore);
         leaderboardGeneralRepository.save(leaderboardGeneral);
         int leaderboardGeneralId = leaderboardGeneral.id;
         leaderboardGeneral.setPlace(leaderboardGeneralId);
@@ -89,19 +91,19 @@ public class UserController {
 
     @GetMapping("/set_high_score/{user_id}/{device_id}/{score}")
     @ResponseBody
-    public HttpResponse SetHighScore(@PathVariable int user_id,
-                                     @PathVariable String device_id,
-                                     @PathVariable int score) {
+    public ResponseEntity<HttpResponse> SetHighScore(@PathVariable int user_id,
+                                                     @PathVariable String device_id,
+                                                     @PathVariable int score) {
 
         User user = userRepository.findById(user_id);
         if (!user.deviceId.equals(device_id))
-            return new HttpResponse( HttpServletResponse.SC_FORBIDDEN, "USER ID AND DEVICE ID MISMATCH");
-
+            return new ResponseEntity<>(new HttpResponse(HttpServletResponse.SC_FORBIDDEN, "USER ID AND DEVICE ID MISMATCH"),HttpStatus.OK) ;
+//  return new ResponseEntity<HttpResponse>( new HttpResponse(HttpServletResponse.SC_FORBIDDEN, "USER ID AND DEVICE ID MISMATCH"),HttpServletResponse.SC_OK) ;
         if (user.highScore < score) {
             user.highScore = score;
             userRepository.save(user);
-            return new HttpResponse( HttpServletResponse.SC_OK, "NEW HIGH SCORE ADDED");
-        } else return new HttpResponse( HttpServletResponse.SC_NO_CONTENT, "SCORE IS LOWER THAN HIGH SCORE");
+            return new ResponseEntity<>(new HttpResponse( HttpServletResponse.SC_OK, "NEW HIGH SCORE ADDED"),HttpStatus.OK) ;
+        } else return new ResponseEntity<>(new HttpResponse( HttpServletResponse.SC_NO_CONTENT, "SCORE IS LOWER THAN HIGH SCORE"),HttpStatus.OK) ;
 
     }
 

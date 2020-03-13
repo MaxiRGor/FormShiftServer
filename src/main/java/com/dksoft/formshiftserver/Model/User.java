@@ -36,4 +36,15 @@ public class User {
     @Column(name = "high_score")
     public int highScore;
 
+    public Integer getId(){
+        return id;
+    }
+
+    public String getName(){
+        return  nickname;
+    }
+
+    public int getHighScore(){
+        return highScore;
+    }
 }
