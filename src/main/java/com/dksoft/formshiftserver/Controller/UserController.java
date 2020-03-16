@@ -88,6 +88,18 @@ public class UserController {
         return  new ResponseEntity<>(new HttpResponse(0, "FACEBOOK DATA JOINED TO USER ACCOUNT"),HttpStatus.OK);
     }
 
+    @GetMapping("/get_facebook_data/{user_id}/{device_id}")
+    @ResponseBody
+    public UserFacebookData GetFacebookData(@PathVariable int user_id,
+                             @PathVariable String device_id) {
+
+        User user = userRepository.findById(user_id);
+        if (!user.deviceId.equals(device_id))
+            return null;
+
+        return userFacebookDataRepository.findDistinctByUserId(user_id);
+    }
+
 
     @GetMapping("/set_high_score/{user_id}/{device_id}/{score}")
     @ResponseBody

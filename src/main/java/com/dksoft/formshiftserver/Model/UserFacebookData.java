@@ -19,17 +19,17 @@ public class UserFacebookData {
     @Column(name = "email")
     public String email;
 
-    @Column(name = "name")
-    public String name;
+    @Column(name = "real_name")
+    public String realName;
 
     @Column(name = "icon_url")
     public String iconUrl;
 
-    public UserFacebookData(int userId, String facebookId, String email, String name, String iconUrl) {
+    public UserFacebookData(int userId, String facebookId, String email, String realName, String iconUrl) {
         this.userId = userId;
         this.facebookId = facebookId;
         this.email = email;
-        this.name = name;
+        this.realName = realName;
         this.iconUrl = iconUrl;
     }
 
