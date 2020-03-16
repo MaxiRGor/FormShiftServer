@@ -66,9 +66,9 @@ public class UserController {
     }
 
 
-    @GetMapping("/join_facebook_data/{user_id}/{device_id}/{facebook_id}/{email}/{name}/{icon_url}")
+    @GetMapping("/add_facebook_data/{user_id}/{device_id}/{facebook_id}/{email}/{name}/{icon_url}")
     @ResponseBody
-    public HttpResponse JoinFacebookData(@PathVariable int user_id,
+    public ResponseEntity<HttpResponse> AddFacebookData(@PathVariable int user_id,
                                     @PathVariable String device_id,
                                     @PathVariable String facebook_id,
                                     @PathVariable String email,
@@ -77,7 +77,7 @@ public class UserController {
 
         User user = userRepository.findById(user_id);
         if (!user.deviceId.equals(device_id))
-            return new HttpResponse( HttpServletResponse.SC_FORBIDDEN, "USER ID AND DEVICE ID MISMATCH");
+            return new ResponseEntity<>(new HttpResponse( 1, "USER ID AND DEVICE ID MISMATCH"),HttpStatus.FORBIDDEN) ;
 
         UserFacebookData userFacebookData = new UserFacebookData(user_id, facebook_id, email, name, icon_url);
         userFacebookDataRepository.save(userFacebookData);
@@ -85,7 +85,7 @@ public class UserController {
         user.facebookDataId = userFacebookData.id;
         userRepository.save(user);
 
-        return new HttpResponse( HttpServletResponse.SC_OK, "FACEBOOK DATA JOINED TO USER ACCOUNT");
+        return  new ResponseEntity<>(new HttpResponse(0, "FACEBOOK DATA JOINED TO USER ACCOUNT"),HttpStatus.OK);
     }
 
 
@@ -97,13 +97,12 @@ public class UserController {
 
         User user = userRepository.findById(user_id);
         if (!user.deviceId.equals(device_id))
-            return new ResponseEntity<>(new HttpResponse(HttpServletResponse.SC_FORBIDDEN, "USER ID AND DEVICE ID MISMATCH"),HttpStatus.OK) ;
-//  return new ResponseEntity<HttpResponse>( new HttpResponse(HttpServletResponse.SC_FORBIDDEN, "USER ID AND DEVICE ID MISMATCH"),HttpServletResponse.SC_OK) ;
+            return new ResponseEntity<>(new HttpResponse(1, "USER ID AND DEVICE ID MISMATCH"),HttpStatus.FORBIDDEN) ;
         if (user.highScore < score) {
             user.highScore = score;
             userRepository.save(user);
-            return new ResponseEntity<>(new HttpResponse( HttpServletResponse.SC_OK, "NEW HIGH SCORE ADDED"),HttpStatus.OK) ;
-        } else return new ResponseEntity<>(new HttpResponse( HttpServletResponse.SC_NO_CONTENT, "SCORE IS LOWER THAN HIGH SCORE"),HttpStatus.OK) ;
+            return new ResponseEntity<>(new HttpResponse( 0, "NEW HIGH SCORE ADDED"),HttpStatus.OK) ;
+        } else return new ResponseEntity<>(new HttpResponse( 2, "SCORE IS LOWER THAN HIGH SCORE"),HttpStatus.OK) ;
 
     }
 

@@ -14,7 +14,7 @@ public interface LeaderboardGeneralRepository extends JpaRepository<LeaderboardG
    // @Query(value = "SELECT new com.dksoft.formshiftserver.Model.LeaderBoardItem(lg.place, u.nickname, u.high_score) FROM LeaderboardGeneral lg LEFT JOIN User u ON lg.user_id = u.id LIMIT 100", nativeQuery = true)
 
 
-    @Query(value = "SELECT * FROM `formshift_leaderboard_general` LIMIT ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM `formshift_leaderboard_general` ORDER by formshift_leaderboard_general.place LIMIT ?1", nativeQuery = true)
     ArrayList<LeaderboardGeneral> getLeaders(Integer limit);
 
 }
